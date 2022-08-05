@@ -5,7 +5,7 @@ import icon from '../../assets/icon.svg';
 import './App.css';
 
 const Hello: FC = () => {
-  return <div></div>;
+  return <div>Hello</div>;
 };
 
 export default function App() {

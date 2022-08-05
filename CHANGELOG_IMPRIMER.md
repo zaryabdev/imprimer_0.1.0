@@ -19,4 +19,4 @@ timeline: true
 
 `2022-08-05`
 
-- Added `antd`
+- Added `antd` `bluebird` `fuse.js` `nanoid` `react-datasheet-grid`
