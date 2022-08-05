@@ -56,7 +56,7 @@ const create = fs.readFileSync(path.join(sql, 'create.sql')).toString().trim();
 const insert = fs.readFileSync(path.join(sql, 'insert.sql')).toString().trim();
 
 // Prepare the query
-db.exec(create);
+// db.exec(create);
 const insertStmt = db.prepare(insert);
 
 // Insert items
