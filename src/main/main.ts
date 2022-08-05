@@ -45,7 +45,8 @@ const isDevelopment =
   process.env.NODE_ENV === 'development' || process.env.DEBUG_PROD === 'true';
 
 // Connect to db
-const db = new Database(':memory:', { verbose: console.log });
+// const db = new Database(':memory:', { verbose: console.log });
+const db = new Database('better_sqlite_demo', { verbose: console.log });
 
 // Read run-time assets
 const sql = isDevelopment
