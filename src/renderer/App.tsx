@@ -75,7 +75,7 @@ export default function App() {
             </div>
           </Content>
           <Footer style={{ textAlign: 'center' }}>
-            Imprimer ©2022 Created by Z Labz
+            Imprimer ©2022 Created by Z Labz [ 0.1 ]
           </Footer>
         </Layout>
       </Layout>
