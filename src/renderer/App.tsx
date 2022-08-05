@@ -15,7 +15,9 @@ const ComponentOne: FC = () => {
 const ComponentTwo: FC = () => {
   return <div>ComponentTwo</div>;
 };
-
+const ComponentThree: FC = () => {
+  return <div>ComponentThree</div>;
+};
 export default function App() {
   const [collapsed, setCollapsed] = useState(false);
   return (
@@ -70,7 +72,7 @@ export default function App() {
               <Routes>
                 <Route exact path="/" element={<ComponentOne />} />
                 <Route path="/packing_type" element={<ComponentOne />} />
-                <Route path="/product_name" element={<ComponentTwo />} />
+                <Route path="/product_name" element={<ComponentThree />} />
               </Routes>
             </div>
           </Content>

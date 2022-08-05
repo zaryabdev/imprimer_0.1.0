@@ -19,7 +19,9 @@ import Database from 'better-sqlite3';
 import MenuBuilder from './menu';
 import { resolveHtmlPath } from './util';
 import webpackPaths from '../../.erb/configs/webpack.paths';
-
+import AppDAO from './dao';
+const dao = new AppDAO('better_sqlite_demo');
+dao.test();
 export default class AppUpdater {
   constructor() {
     log.transports.file.level = 'info';
@@ -46,7 +48,7 @@ const isDevelopment =
 
 // Connect to db
 // const db = new Database(':memory:', { verbose: console.log });
-const db = new Database('better_sqlite_demo', { verbose: console.log });
+// const db = new Database('better_sqlite_demo', { verbose: console.log });
 
 // Read run-time assets
 const sql = isDevelopment
@@ -57,17 +59,17 @@ const insert = fs.readFileSync(path.join(sql, 'insert.sql')).toString().trim();
 
 // Prepare the query
 // db.exec(create);
-const insertStmt = db.prepare(insert);
+// const insertStmt = db.prepare(insert);
 
 // Insert items
-const insertMany = db.transaction((cats) => {
-  for (const cat of cats) insertStmt.run(cat);
-});
-insertMany([
-  { name: 'Joey', age: 2 },
-  { name: 'Sally', age: 4 },
-  { name: 'Junior', age: 1 },
-]);
+// const insertMany = db.transaction((cats) => {
+//   for (const cat of cats) insertStmt.run(cat);
+// });
+// insertMany([
+//   { name: 'Joey', age: 2 },
+//   { name: 'Sally', age: 4 },
+//   { name: 'Junior', age: 1 },
+// ]);
 
 if (isDevelopment) {
   require('electron-debug')();
