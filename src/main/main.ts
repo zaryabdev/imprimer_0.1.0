@@ -15,13 +15,17 @@ import fs from 'fs';
 import { app, BrowserWindow, shell, ipcMain } from 'electron';
 import { autoUpdater } from 'electron-updater';
 import log from 'electron-log';
-import Database from 'better-sqlite3';
+// import Database from 'better-sqlite3';
 import MenuBuilder from './menu';
 import { resolveHtmlPath } from './util';
 import webpackPaths from '../../.erb/configs/webpack.paths';
+
 import AppDAO from './dao';
+import ProductNameRepository from './repositories/product_name_repository';
 const dao = new AppDAO('better_sqlite_demo');
-dao.test();
+const productNameRepo = new ProductNameRepository(dao);
+productNameRepo.createTable();
+
 export default class AppUpdater {
   constructor() {
     log.transports.file.level = 'info';
@@ -47,15 +51,16 @@ const isDevelopment =
   process.env.NODE_ENV === 'development' || process.env.DEBUG_PROD === 'true';
 
 // Connect to db
-// const db = new Database(':memory:', { verbose: console.log });
+// const db = new sDatabase(':memory:', { verbose: console.log });
 // const db = new Database('better_sqlite_demo', { verbose: console.log });
 
 // Read run-time assets
-const sql = isDevelopment
-  ? path.join(webpackPaths.appPath, 'sql')
-  : path.join(__dirname, '../../sql'); // In prod, __dirname is release/app/dist/main. We want release/app/sql
-const create = fs.readFileSync(path.join(sql, 'create.sql')).toString().trim();
-const insert = fs.readFileSync(path.join(sql, 'insert.sql')).toString().trim();
+// const sql = isDevelopment
+//   ? path.join(webpackPaths.appPath, 'sql')
+//   : path.join(__dirname, '../../sql');
+// In prod, __dirname is release/app/dist/main. We want release/app/sql
+// const create = fs.readFileSync(path.join(sql, 'create.sql')).toString().trim();
+// const insert = fs.readFileSync(path.join(sql, 'insert.sql')).toString().trim();
 
 // Prepare the query
 // db.exec(create);
@@ -145,6 +150,20 @@ const createWindow = async () => {
 /**
  * Add event listeners...
  */
+
+// product name
+ipcMain.on('create:product_name', async (event, mainData) => {
+  console.log('Inside Main create:product_name');
+  console.log({ mainData });
+  const webContents = event.sender;
+  const win = BrowserWindow.fromWebContents(webContents);
+  win.setTitle(mainData.name);
+  productNameRepo.create(mainData.name).then((result) => {
+    console.log('result from create:product_name sql');
+    console.log({ result });
+    win.webContents.send('create:product_name', result);
+  });
+});
 
 app.on('window-all-closed', () => {
   // Respect the OSX convention of having the application in memory even

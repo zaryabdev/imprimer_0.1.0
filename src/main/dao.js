@@ -1,5 +1,3 @@
-// dao.js
-
 // const sqlite3 = require('sqlite3');
 const Promise = require('bluebird');
 
@@ -7,62 +5,48 @@ const Database = require('better-sqlite3');
 
 class AppDAO {
     constructor(dbFilePath) {
-        // this.db = new sqlite3.Database(dbFilePath, (err) => {
-        //     if (err) {
-        //         console.log('Could not connect to database', err);
-        //     } else {
-        //         console.log('Connected to database');
-        //     }
-        // });
         this.db = new Database(dbFilePath,  {
-            verbose: console.log('Connected to database');
+            verbose: console.log('Connected to Database')
          });
     }
-    const stmt = db.prepare('SELECT name, age FROM cats');
-    test(){
-        console.log(`Hi HI HI`);
-        debugger
+    async run(sql, params = []) {
+        const stmt = this.db.prepare(sql);
+        try {
+            const {lastInsertRowid} =  await  stmt.run(params);
+            console.log(lastInsertRowid);
+            return lastInsertRowid;
+        } catch (error) {
+            console.log(`DAO : run`);
+            console.log(error);
+        }
+        return 0;
     }
-    // run(sql, params = []) {
-    //     return new Promise((resolve, reject) => {
-    //         this.db.run(sql, params, function (err) {
-    //             if (err) {
-    //                 console.log('Error running sql ' + sql);
-    //                 console.log(err);
-    //                 reject(err);
-    //             } else {
-    //                 resolve({ id: this.lastID });
-    //             }
-    //         });
-    //     });
-    // }
-    // get(sql, params = []) {
-    //     return new Promise((resolve, reject) => {
-    //         this.db.get(sql, params, (err, result) => {
-    //             if (err) {
-    //                 console.log('Error running sql: ' + sql);
-    //                 console.log(err);
-    //                 reject(err);
-    //             } else {
-    //                 resolve(result);
-    //             }
-    //         });
-    //     });
-    // }
+    async get(sql, params = []) {
+        const stmt = this.db.prepare(sql);
+        try {
+            const result =  await  stmt.get(params);
+            console.log(result);
+            return result;
 
-    // all(sql, params = []) {
-    //     return new Promise((resolve, reject) => {
-    //         this.db.all(sql, params, (err, rows) => {
-    //             if (err) {
-    //                 console.log('Error running sql: ' + sql);
-    //                 console.log(err);
-    //                 reject(err);
-    //             } else {
-    //                 resolve(rows);
-    //             }
-    //         });
-    //     });
-    // }
+        } catch (error) {
+            console.log(`DAO : get`);
+            console.log(error);
+        }
+        return {};
+    }
+    async all(sql, params = []) {
+        const stmt = this.db.prepare(sql);
+        try {
+            const resultSet =  await  stmt.all(params);
+            console.log(resultSet);
+            return resultSet;
+
+        } catch (error) {
+            console.log(`DAO : all`);
+            console.log(error);
+        }
+        return [];
+    }
 }
 
 /**

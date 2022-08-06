@@ -7,6 +7,7 @@ import {
   OrderedListOutlined,
 } from '@ant-design/icons';
 import './App.css';
+import { ProductName } from './setup/ProductName';
 const { Content, Footer, Sider } = Layout;
 
 const ComponentOne: FC = () => {
@@ -70,9 +71,9 @@ export default function App() {
               style={{ padding: 24, minHeight: 360 }}
             >
               <Routes>
-                <Route exact path="/" element={<ComponentOne />} />
+                <Route exact path="/" element={<ProductName />} />
                 <Route path="/packing_type" element={<ComponentOne />} />
-                <Route path="/product_name" element={<ComponentThree />} />
+                <Route path="/product_name" element={<ProductName />} />
               </Routes>
             </div>
           </Content>
