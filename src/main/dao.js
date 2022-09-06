@@ -7,11 +7,12 @@ const logger = require('./logger');
 class AppDAO {
   constructor(dbFilePath) {
     this.db = new Database(dbFilePath, {
-      verbose: logger.log('Connected to Database'),
+      verbose: console.log('Connected to Database'),
     });
   }
+
   async run(sql, params = []) {
-    logger.log('DAO : run');
+    logger.debug('DAO : run');
     const stmt = this.db.prepare(sql);
     try {
       const { lastInsertRowid } = await stmt.run(params);
@@ -23,8 +24,9 @@ class AppDAO {
     }
     return 0;
   }
+
   async get(sql, params = []) {
-    logger.log('DAO : get');
+    logger.debug('DAO : get');
     const stmt = this.db.prepare(sql);
     try {
       const result = await stmt.get(params);
@@ -37,7 +39,7 @@ class AppDAO {
     return {};
   }
   async all(sql, params = []) {
-    logger.log('DAO : all');
+    logger.debug('DAO : all');
     const stmt = this.db.prepare(sql);
     try {
       const resultSet = await stmt.all(params);
