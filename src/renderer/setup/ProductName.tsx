@@ -22,7 +22,7 @@ const tailLayout = {
 
 const ProductName: React.FC = () => {
   const [allRecords, setAllRecords] = useState<DataType[]>([]);
-  const [selectedItem, setSelectedItem] = useState({
+  const [selectedItem, setSelectedItem] = useState<DataType>({
     id: '',
     name: '',
     price: 0,
@@ -73,7 +73,9 @@ const ProductName: React.FC = () => {
       key: 'action',
       render: (_, record) => (
         <Space size="middle">
-          <a>Edit {record.name}</a>
+          <Button type="primary" onClick={() => onEdit(record)}>
+            Edit {record.name}
+          </Button>
           <Button type="primary" onClick={() => deleteProduct(record.id)}>
             Delete {record.id}
           </Button>
@@ -88,18 +90,30 @@ const ProductName: React.FC = () => {
 
   const [form] = Form.useForm();
 
-  const onFinish = (values: any) => {
-    console.log(values);
+  const onFinish = (item: any) => {
+    console.log(item);
     console.log('Going to call createProductName');
-    console.log({ values });
-    window.electron.ipcRenderer.createProductName(values);
+    console.log({ item });
 
-    window.electron.ipcRenderer.on('create:product_name', (responseData) => {
-      console.log('create:product_name event response');
-      console.log({ responseData });
-      console.log('Going to call getAllProductNames from createProductName');
-      getAllProductNames();
-    });
+    if (item.id === '') {
+      window.electron.ipcRenderer.createProductName(item);
+
+      window.electron.ipcRenderer.on('create:product_name', (responseData) => {
+        console.log('create:product_name event response');
+        console.log({ responseData });
+        console.log('Going to call getAllProductNames from createProductName');
+      });
+    } else {
+      window.electron.ipcRenderer.updateProductName(item);
+
+      window.electron.ipcRenderer.on('update:product_name', (responseData) => {
+        console.log('update:product_name event response');
+        console.log({ responseData });
+        console.log('Going to call updateProductName from update:product_name');
+      });
+    }
+
+    getAllProductNames();
   };
 
   const onReset = () => {
@@ -108,10 +122,21 @@ const ProductName: React.FC = () => {
 
   const onFill = () => {
     form.setFieldsValue({
+      id: '',
       name: 'demo',
       price: 100,
       tags: ['demo'],
       desc: 'demo desc',
+    });
+  };
+
+  const onEdit = (item: any) => {
+    form.setFieldsValue({
+      id: item.id,
+      name: item.name,
+      price: item.price,
+      tags: item.tags,
+      desc: item.desc,
     });
   };
 
@@ -178,9 +203,8 @@ const ProductName: React.FC = () => {
       console.log('delete:product_name event response');
       console.log({ responseData });
       console.log('Going to call getAllProductNames from deleteProductName');
-      // addNew();
-      getAllProductNames();
     });
+    getAllProductNames();
   };
 
   const getAllProductNames = () => {

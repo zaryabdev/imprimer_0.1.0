@@ -31,7 +31,7 @@ class ProductNameRepository {
 
   update(item) {
     console.log(`update called`);
-    const { id, name } = item;
+    const { id, name, desc, tags, price } = item;
     let resultSet = this.dao.run(
       `UPDATE product_name
         SET name = ?,
@@ -39,7 +39,7 @@ class ProductNameRepository {
         desc = ?,
         tags = ?
         WHERE id = ?`,
-      [name, id]
+      [name, price, desc, tags, id]
     );
     console.log({ resultSet });
     return resultSet;

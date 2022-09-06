@@ -168,6 +168,20 @@ ipcMain.on('create:product_name', async (event, mainData) => {
   });
 });
 
+ipcMain.on('update:product_name', async (event, mainData) => {
+  console.log('Inside Main update:product_name');
+  console.log({ mainData });
+
+  const webContents = event.sender;
+  const win = BrowserWindow.fromWebContents(webContents);
+
+  productNameRepo.update(mainData).then((result: any) => {
+    console.log('result from update:product_name sql');
+    console.log({ result });
+    win.webContents.send('update:product_name', result);
+  });
+});
+
 ipcMain.on('get:product_names', async (event, mainData) => {
   console.log('Inside Main get:product_names');
   console.log({ mainData });
