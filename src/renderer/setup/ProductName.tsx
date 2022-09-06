@@ -3,84 +3,12 @@ import { Col, Row, Space, Table, Tag, Button, Form, Input, Select } from 'antd';
 import type { ColumnsType } from 'antd/es/table';
 
 interface DataType {
-  key: string;
+  id: string;
   name: string;
-  age: number;
-  address: string;
+  price: number;
   tags: string[];
+  desc: string;
 }
-const columns: ColumnsType<DataType> = [
-  {
-    title: 'Name',
-    dataIndex: 'name',
-    key: 'name',
-    render: (text) => <a>{text}</a>,
-  },
-  {
-    title: 'Age',
-    dataIndex: 'age',
-    key: 'age',
-  },
-  {
-    title: 'Address',
-    dataIndex: 'address',
-    key: 'address',
-  },
-  {
-    title: 'Tags',
-    key: 'tags',
-    dataIndex: 'tags',
-    render: (_, { tags }) => (
-      <>
-        {tags.map((tag) => {
-          let color = tag.length > 5 ? 'geekblue' : 'green';
-          if (tag === 'loser') {
-            color = 'volcano';
-          }
-          return (
-            <Tag color={color} key={tag}>
-              {tag.toUpperCase()}
-            </Tag>
-          );
-        })}
-      </>
-    ),
-  },
-  {
-    title: 'Action',
-    key: 'action',
-    render: (_, record) => (
-      <Space size="middle">
-        <a>Invite {record.name}</a>
-        <a>Delete</a>
-      </Space>
-    ),
-  },
-];
-
-const data: DataType[] = [
-  {
-    key: '1',
-    name: 'John Brown',
-    age: 32,
-    address: 'New York No. 1 Lake Park',
-    tags: ['nice', 'developer'],
-  },
-  {
-    key: '2',
-    name: 'Jim Green',
-    age: 42,
-    address: 'London No. 1 Lake Park',
-    tags: ['loser'],
-  },
-  {
-    key: '3',
-    name: 'Joe Black',
-    age: 32,
-    address: 'Sidney No. 1 Lake Park',
-    tags: ['cool', 'teacher'],
-  },
-];
 
 const { Option } = Select;
 
@@ -93,31 +21,85 @@ const tailLayout = {
 };
 
 const ProductName: React.FC = () => {
-  const [allRecords, setAllRecords] = useState([]);
+  const [allRecords, setAllRecords] = useState<DataType[]>([]);
   const [selectedItem, setSelectedItem] = useState({
     id: '',
     name: '',
+    price: 0,
+    tags: [],
+    desc: '',
   });
+
+  // antd table - start
+  const columns: ColumnsType<DataType> = [
+    {
+      title: 'Name',
+      dataIndex: 'name',
+      key: 'name',
+      render: (text) => <a>{text}</a>,
+    },
+    {
+      title: 'Price',
+      dataIndex: 'price',
+      key: 'price',
+    },
+    {
+      title: 'Description',
+      dataIndex: 'desc',
+      key: 'desc',
+    },
+    {
+      title: 'Tags',
+      key: 'tags',
+      dataIndex: 'tags',
+      // render: (_, { tags }) => (
+      //   <>
+      //     {tags.map((tag) => {
+      //       let color = tag.length > 5 ? 'geekblue' : 'green';
+      //       if (tag === 'loser') {
+      //         color = 'volcano';
+      //       }
+      //       return (
+      //         <Tag color={color} key={tag}>
+      //           {tag.toUpperCase()}
+      //         </Tag>
+      //       );
+      //     })}
+      //   </>
+      // ),
+    },
+    {
+      title: 'Action',
+      key: 'action',
+      render: (_, record) => (
+        <Space size="middle">
+          <a>Edit {record.name}</a>
+          <Button type="primary" onClick={() => deleteProduct(record.id)}>
+            Delete {record.id}
+          </Button>
+        </Space>
+      ),
+    },
+  ];
+
+  // antd table - end
 
   // antd form - start
 
   const [form] = Form.useForm();
 
-  const onGenderChange = (value: string) => {
-    switch (value) {
-      case 'male':
-        form.setFieldsValue({ note: 'Hi, man!' });
-        return;
-      case 'female':
-        form.setFieldsValue({ note: 'Hi, lady!' });
-        return;
-      case 'other':
-        form.setFieldsValue({ note: 'Hi there!' });
-    }
-  };
-
   const onFinish = (values: any) => {
     console.log(values);
+    console.log('Going to call createProductName');
+    console.log({ values });
+    window.electron.ipcRenderer.createProductName(values);
+
+    window.electron.ipcRenderer.on('create:product_name', (responseData) => {
+      console.log('create:product_name event response');
+      console.log({ responseData });
+      console.log('Going to call getAllProductNames from createProductName');
+      getAllProductNames();
+    });
   };
 
   const onReset = () => {
@@ -126,15 +108,17 @@ const ProductName: React.FC = () => {
 
   const onFill = () => {
     form.setFieldsValue({
-      note: 'Hello world!',
-      gender: 'male',
+      name: 'demo',
+      price: 100,
+      tags: ['demo'],
+      desc: 'demo desc',
     });
   };
 
   // antd form - end
 
   useEffect(() => {
-    // getAllProductNames();
+    getAllProductNames();
   }, []);
 
   const handleSelectedItem = (item) => {
@@ -154,6 +138,9 @@ const ProductName: React.FC = () => {
     setSelectedItem({
       id: '',
       name: '',
+      price: 0,
+      tags: [],
+      desc: '',
     });
   };
 
@@ -182,15 +169,16 @@ const ProductName: React.FC = () => {
       getAllProductNames();
     });
   };
-  const deleteProductName = (id) => {
+  const deleteProduct = (id: any) => {
     console.log('Going to call deleteProductName');
+    console.log(id);
     window.electron.ipcRenderer.deleteProductName(id);
 
     window.electron.ipcRenderer.on('delete:product_name', (responseData) => {
       console.log('delete:product_name event response');
       console.log({ responseData });
       console.log('Going to call getAllProductNames from deleteProductName');
-      addNew();
+      // addNew();
       getAllProductNames();
     });
   };
@@ -210,7 +198,7 @@ const ProductName: React.FC = () => {
     <>
       <Row>
         <Col span={12}>
-          <Table columns={columns} dataSource={data} />
+          <Table columns={columns} dataSource={allRecords} />
         </Col>
         <Col span={12}>
           <Form
@@ -219,49 +207,31 @@ const ProductName: React.FC = () => {
             name="control-hooks"
             onFinish={onFinish}
           >
-            <Form.Item name="note" label="Note" rules={[{ required: true }]}>
+            <Form.Item name="name" label="Name" rules={[{ required: true }]}>
               <Input />
             </Form.Item>
-            <Form.Item
-              name="gender"
-              label="Gender"
-              rules={[{ required: true }]}
-            >
-              <Select
-                placeholder="Select a option and change input text above"
-                onChange={onGenderChange}
-                allowClear
-              >
-                <Option value="male">male</Option>
-                <Option value="female">female</Option>
-                <Option value="other">other</Option>
-              </Select>
+            <Form.Item name="price" label="Price" rules={[{ required: true }]}>
+              <Input type="number" />
             </Form.Item>
             <Form.Item
-              noStyle
-              shouldUpdate={(prevValues, currentValues) =>
-                prevValues.gender !== currentValues.gender
-              }
+              name="desc"
+              label="Description"
+              rules={[{ required: false }]}
             >
-              {({ getFieldValue }) =>
-                getFieldValue('gender') === 'other' ? (
-                  <Form.Item
-                    name="customizeGender"
-                    label="Customize Gender"
-                    rules={[{ required: true }]}
-                  >
-                    <Input />
-                  </Form.Item>
-                ) : null
-              }
+              <Input />
             </Form.Item>
+            <Form.Item name="tags" label="Tags" rules={[{ required: false }]}>
+              <Input />
+            </Form.Item>
+
             <Form.Item {...tailLayout}>
               <Button type="primary" htmlType="submit">
-                Submit
+                Save
               </Button>
               <Button htmlType="button" onClick={onReset}>
                 Reset
               </Button>
+              <Button htmlType="button">Delete</Button>
               <Button type="link" htmlType="button" onClick={onFill}>
                 Fill form
               </Button>

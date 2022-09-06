@@ -1,23 +1,31 @@
+const logger = require('../logger');
+
 class ProductNameRepository {
   constructor(dao) {
     console.log(`constructor called`);
+    logger.debug('constructor called');
     this.dao = dao;
   }
 
   createTable() {
-    console.log(`createTable called for product_name`);
+    logger.debug('createTable called for product_name');
     const sql = `
         CREATE TABLE IF NOT EXISTS product_name (
         id INTEGER PRIMARY KEY AUTOINCREMENT,
-        name TEXT
+        name TEXT,
+        price INTEGER,
+        tags TEXT,
+        desc TEXT
         )`;
     return this.dao.run(sql);
   }
-  create(name) {
-    console.log(`create called`);
-    const result = this.dao.run('INSERT INTO product_name (name) VALUES (?)', [
-      name,
-    ]);
+
+  create({ name, price, tags, desc }) {
+    logger.debug('create called');
+    const result = this.dao.run(
+      'INSERT INTO product_name (name,price,tags,desc) VALUES (?,?,?,?)',
+      [name, price, tags, desc]
+    );
     return result;
   }
 
@@ -25,7 +33,12 @@ class ProductNameRepository {
     console.log(`update called`);
     const { id, name } = item;
     let resultSet = this.dao.run(
-      `UPDATE product_name SET name = ? WHERE id = ?`,
+      `UPDATE product_name
+        SET name = ?,
+        price = ?,
+        desc = ?,
+        tags = ?
+        WHERE id = ?`,
       [name, id]
     );
     console.log({ resultSet });
@@ -43,7 +56,7 @@ class ProductNameRepository {
   }
 
   getAll() {
-    console.log(`getAll called`);
+    logger.debug(`getAll called`);
     return this.dao.all(`SELECT * FROM product_name`);
   }
 }
