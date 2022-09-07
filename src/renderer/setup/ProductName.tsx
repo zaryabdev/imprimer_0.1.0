@@ -1,12 +1,13 @@
 import React, { useState, useEffect } from 'react';
 import { Col, Row, Space, Table, Tag, Button, Form, Input, Select } from 'antd';
 import type { ColumnsType } from 'antd/es/table';
+import { nanoid } from 'nanoid';
 
 interface DataType {
   id: string;
   name: string;
   price: number;
-  tags: string[];
+  tags: string;
   desc: string;
 }
 
@@ -16,6 +17,7 @@ const layout = {
   labelCol: { span: 8 },
   wrapperCol: { span: 16 },
 };
+
 const tailLayout = {
   wrapperCol: { offset: 8, span: 16 },
 };
@@ -26,7 +28,7 @@ const ProductName: React.FC = () => {
     id: '',
     name: '',
     price: 0,
-    tags: [],
+    tags: '',
     desc: '',
   });
 
@@ -74,10 +76,10 @@ const ProductName: React.FC = () => {
       render: (_, record) => (
         <Space size="middle">
           <Button type="primary" onClick={() => onEdit(record)}>
-            Edit {record.name}
+            Edit
           </Button>
           <Button type="primary" onClick={() => deleteProduct(record.id)}>
-            Delete {record.id}
+            Delete
           </Button>
         </Space>
       ),
@@ -92,10 +94,14 @@ const ProductName: React.FC = () => {
 
   const onFinish = (item: any) => {
     console.log(item);
-    console.log('Going to call createProductName');
+    console.log('%c Going to call createProductName', 'color: tomato');
     console.log({ item });
 
-    if (item.id === '') {
+    if (item.id === undefined || item.id === '') {
+      item.id = nanoid();
+      if (item.desc === undefined) item.desc = '';
+      if (item.tags === undefined) item.tags = '';
+
       window.electron.ipcRenderer.createProductName(item);
 
       window.electron.ipcRenderer.on('create:product_name', (responseData) => {
@@ -104,6 +110,8 @@ const ProductName: React.FC = () => {
         console.log('Going to call getAllProductNames from createProductName');
       });
     } else {
+      if (item.desc === undefined) item.desc = '';
+      if (item.tags === undefined) item.tags = '';
       window.electron.ipcRenderer.updateProductName(item);
 
       window.electron.ipcRenderer.on('update:product_name', (responseData) => {
@@ -123,10 +131,10 @@ const ProductName: React.FC = () => {
   const onFill = () => {
     form.setFieldsValue({
       id: '',
-      name: 'demo',
-      price: 100,
-      tags: ['demo'],
-      desc: 'demo desc',
+      name: 'sample',
+      price: 0,
+      tags: 'sample',
+      desc: 'sample desc',
     });
   };
 
@@ -161,7 +169,7 @@ const ProductName: React.FC = () => {
 
   const addNew = () => {
     setSelectedItem({
-      id: '',
+      id: 0,
       name: '',
       price: 0,
       tags: [],
@@ -194,6 +202,7 @@ const ProductName: React.FC = () => {
       getAllProductNames();
     });
   };
+
   const deleteProduct = (id: any) => {
     console.log('Going to call deleteProductName');
     console.log(id);
@@ -231,6 +240,9 @@ const ProductName: React.FC = () => {
             name="control-hooks"
             onFinish={onFinish}
           >
+            <Form.Item name="id" label="ID" rules={[{ required: false }]}>
+              <Input readOnly />
+            </Form.Item>
             <Form.Item name="name" label="Name" rules={[{ required: true }]}>
               <Input />
             </Form.Item>
@@ -255,7 +267,6 @@ const ProductName: React.FC = () => {
               <Button htmlType="button" onClick={onReset}>
                 Reset
               </Button>
-              <Button htmlType="button">Delete</Button>
               <Button type="link" htmlType="button" onClick={onFill}>
                 Fill form
               </Button>

@@ -11,7 +11,7 @@ class ProductNameRepository {
     logger.debug('createTable called for product_name');
     const sql = `
         CREATE TABLE IF NOT EXISTS product_name (
-        id INTEGER PRIMARY KEY AUTOINCREMENT,
+        id TEXT,
         name TEXT,
         price INTEGER,
         tags TEXT,
@@ -20,11 +20,13 @@ class ProductNameRepository {
     return this.dao.run(sql);
   }
 
-  create({ name, price, tags, desc }) {
+  create({ id, name, price, tags, desc }) {
     logger.debug('create called');
+    console.log({ id, name, price, tags, desc });
+
     const result = this.dao.run(
-      'INSERT INTO product_name (name,price,tags,desc) VALUES (?,?,?,?)',
-      [name, price, tags, desc]
+      'INSERT INTO product_name (id,name,price,tags,desc) VALUES (?,?,?,?,?)',
+      [id, name, price, tags, desc]
     );
     return result;
   }

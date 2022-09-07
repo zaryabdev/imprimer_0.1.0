@@ -8,6 +8,7 @@ import {
 } from '@ant-design/icons';
 import './App.css';
 import { ProductName } from './setup/ProductName';
+import Grid from './grid/GridSample';
 const { Content, Footer, Sider } = Layout;
 
 const ComponentOne: FC = () => {
@@ -71,7 +72,7 @@ export default function App() {
               style={{ padding: 24, minHeight: 360 }}
             >
               <Routes>
-                <Route exact path="/" element={<ProductName />} />
+                <Route exact path="/" element={<Grid />} />
                 <Route path="/packing_type" element={<ComponentOne />} />
                 <Route path="/product_name" element={<ProductName />} />
               </Routes>
