@@ -1,15 +1,15 @@
-import React, { FC, useState } from 'react';
-import { MemoryRouter as Router, Routes, Route, Link } from 'react-router-dom';
-import { Layout, Menu } from 'antd';
 import {
   FormOutlined,
-  SettingOutlined,
   OrderedListOutlined,
+  SettingOutlined,
 } from '@ant-design/icons';
+import { Layout, Menu } from 'antd';
+import React, { FC, useEffect, useState } from 'react';
+import { Link, MemoryRouter as Router, Route, Routes } from 'react-router-dom';
 import './App.css';
-import { ProductName } from './setup/ProductName';
-import { PackingType } from './setup/PackingType';
 import Grid from './grid/GridSample';
+import { PackingType } from './setup/PackingType';
+import { ProductName } from './setup/ProductName';
 const { Content, Footer, Sider } = Layout;
 
 const ComponentOne: FC = () => {
@@ -25,6 +25,18 @@ const ComponentThree: FC = () => {
 
 export default function App() {
   const [collapsed, setCollapsed] = useState(true);
+  const [isOnline, setIsOnline] = useState('online');
+
+  useEffect(() => {
+    window.addEventListener('online', updateOnlineStatus);
+    window.addEventListener('offline', updateOnlineStatus);
+  }, []);
+
+  function updateOnlineStatus() {
+    var condition = navigator.onLine ? 'online' : 'offline';
+    setIsOnline(condition);
+  }
+
   return (
     <Router>
       <Layout style={{ minHeight: '100vh' }}>
@@ -92,7 +104,8 @@ export default function App() {
             </div>
           </Content>
           <Footer style={{ textAlign: 'center' }}>
-            Imprimer ©2022 Created by Z Labz [ 0.1 ]
+            Imprimer ©2022 Created by Z Labz [ 0.1 ] | Connection status :
+            <code>{JSON.stringify(isOnline, null, 2)}</code>
           </Footer>
         </Layout>
       </Layout>
