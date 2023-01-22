@@ -21,7 +21,8 @@ import webpackPaths from '../../.erb/configs/webpack.paths';
 import MenuBuilder from './menu';
 import { resolveHtmlPath } from './util';
 
-import createZipArchive from './backup/createArchive';
+// import { createZipArchive } from './backup/createArchive';
+import AdmZip from 'adm-zip';
 import AppDAO from './dao';
 import PackingTypeRepository from './repositories/packing_type_repository';
 import ProductNameRepository from './repositories/product_name_repository';
@@ -272,7 +273,10 @@ ipcMain.on('get:packing_types', async (event, mainData) => {
 ipcMain.on('add:zip', async (event, mainData) => {
   console.log('Inside Main add:zip');
   console.log({ mainData });
+
   createZipArchive('./test');
+
+  // createZipArchive('./backup/test');
   // const webContents = event.sender;
   // const win = BrowserWindow.fromWebContents(webContents);
 
@@ -282,6 +286,23 @@ ipcMain.on('add:zip', async (event, mainData) => {
   //   win.webContents.send('add:zip', result);
   // });
 });
+
+async function createZipArchive(filepath) {
+  console.log(`Inside createZipArchive : ` + filepath);
+
+  console.log(__dirname);
+  console.log(__filename);
+
+  // try {
+  //   const zip = new AdmZip();
+  //   const outputFile = 'test.zip';
+  //   zip.addLocalFolder(filepath);
+  //   zip.writeZip(outputFile);
+  //   console.log(`Created ${outputFile} successfully`);
+  // } catch (e) {
+  //   console.log(`Something went wrong. ${e}`);
+  // }
+}
 
 app.on('window-all-closed', () => {
   // Respect the OSX convention of having the application in memory even

@@ -15,3 +15,5 @@ async function createZipArchive(filepath) {
     console.log(`Something went wrong. ${e}`);
   }
 }
+
+export { createZipArchive };
