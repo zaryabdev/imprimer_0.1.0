@@ -16,6 +16,7 @@ import { autoUpdater } from 'electron-updater';
 import fs from 'fs';
 import path from 'path';
 import 'regenerator-runtime/runtime';
+import logger from './logger';
 // import Database from 'better-sqlite3';
 import webpackPaths from '../../.erb/configs/webpack.paths';
 import MenuBuilder from './menu';
@@ -26,7 +27,7 @@ import AdmZip from 'adm-zip';
 import AppDAO from './dao';
 import PackingTypeRepository from './repositories/packing_type_repository';
 import ProductNameRepository from './repositories/product_name_repository';
-const dao = new AppDAO('sqlite_0.1.0');
+const dao = new AppDAO('sqlite_010');
 
 const productNameRepo = new ProductNameRepository(dao);
 const packingTypeRepo = new PackingTypeRepository(dao);
@@ -278,9 +279,15 @@ ipcMain.on('add:zip', async (event, mainData) => {
 
   // D:\\Work\\github-workspace\\imprimer_0.1.0\\release\\build\\win-unpacked\\resources\\app.asar\\dist\\main\\main.js
 
-  let ret = createZipArchive('../../../sqlite_0.1.0');
+  // failed
+  // let ret = createZipArchive('../../../sqlite_010');
+  // D:\Work\github-workspace\imprimer_0.1.0\release
+  let ret = createZipArchive(
+    'D:/Work/github-workspace/imprimer_0.1.0/release/build/win-unpacked/sqlite_010'
+  );
   const webContents = event.sender;
   const win = BrowserWindow.fromWebContents(webContents);
+
   win.webContents.send('add:zip', {
     dir: __dirname,
     file: __filename,
@@ -295,20 +302,22 @@ ipcMain.on('add:zip', async (event, mainData) => {
 });
 
 async function createZipArchive(filepath: string) {
-  console.log(`Inside createZipArchive : ` + filepath);
+  logger.debug(`Inside createZipArchive : ` + filepath);
 
-  console.log(__dirname);
-  console.log(__filename);
+  logger.debug(__dirname);
+  logger.debug(__filename);
 
   try {
     const zip = new AdmZip();
     const outputFile = 'test.zip';
-    zip.addLocalFolder(filepath);
+    zip.addFile(filepath);
     zip.writeZip(outputFile);
     console.log(`Created ${outputFile} successfully`);
+    logger.debug({ status: `Created ${outputFile} successfully` });
     return { status: `Created ${outputFile} successfully` };
   } catch (e) {
-    console.log(`Something went wrong. ${e}`);
+    logger.debug(e);
+    logger.debug(`Something went wrong. ${e}`);
     return { e };
   }
 }

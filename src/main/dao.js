@@ -1,11 +1,12 @@
 // const sqlite3 = require('sqlite3');
 const Promise = require('bluebird');
 const Database = require('better-sqlite3');
-
 const logger = require('./logger');
 
 class AppDAO {
   constructor(dbFilePath) {
+    logger.debug(__dirname);
+    logger.debug(dbFilePath);
     this.db = new Database(dbFilePath, {
       verbose: console.log('Connected to Database'),
     });

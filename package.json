@@ -1,6 +1,6 @@
 {
-  "name": "electron-react-boilerplate",
-  "description": "Electron application boilerplate based on React, React Router, Webpack, React Fast Refresh for rapid application development",
+  "name": "imprimer_0.1.0",
+  "description": "Electron React Better-SQLite template startup",
   "scripts": {
     "build": "concurrently \"npm run build:main\" \"npm run build:renderer\"",
     "build:main": "cross-env NODE_ENV=production TS_NODE_TRANSPILE_ONLY=true webpack --config ./.erb/configs/webpack.config.main.prod.ts",
@@ -30,8 +30,8 @@
     ]
   },
   "build": {
-    "productName": "ElectronReact",
-    "appId": "org.erb.ElectronReact",
+    "productName": "Imprimer_0.1.0",
+    "appId": "org.zaryab.Imprimer_0.1.0",
     "asar": true,
     "asarUnpack": "**\\*.{node,dll}",
     "files": [
