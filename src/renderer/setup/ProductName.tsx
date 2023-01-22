@@ -1,7 +1,7 @@
-import React, { useState, useEffect } from 'react';
-import { Col, Row, Space, Table, Tag, Button, Form, Input, Select } from 'antd';
+import { Button, Col, Form, Input, Row, Select, Space, Table, Tag } from 'antd';
 import type { ColumnsType } from 'antd/es/table';
 import { nanoid } from 'nanoid';
+import React, { useEffect, useState } from 'react';
 
 interface DataType {
   id: string;

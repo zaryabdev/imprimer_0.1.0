@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 
 const ProductName: React.FC = () => {
   const [allRecords, setAllRecords] = useState([]);
@@ -222,4 +222,4 @@ const ProductName: React.FC = () => {
   );
 };
 
-export { ProductName };
+// export { ProductName };

@@ -8,23 +8,24 @@
  * When running `npm run build` or `npm run build:main`, this file is compiled to
  * `./src/main.js` using webpack. This gives us some performance wins.
  */
-import 'core-js/stable';
-import 'regenerator-runtime/runtime';
-import path from 'path';
-import fs from 'fs';
 import console from 'console';
-import { app, BrowserWindow, shell, ipcMain } from 'electron';
-import { autoUpdater } from 'electron-updater';
+import 'core-js/stable';
+import { app, BrowserWindow, ipcMain, shell } from 'electron';
 import log from 'electron-log';
+import { autoUpdater } from 'electron-updater';
+import fs from 'fs';
+import path from 'path';
+import 'regenerator-runtime/runtime';
 // import Database from 'better-sqlite3';
+import webpackPaths from '../../.erb/configs/webpack.paths';
 import MenuBuilder from './menu';
 import { resolveHtmlPath } from './util';
-import webpackPaths from '../../.erb/configs/webpack.paths';
 
+import createZipArchive from './backup/createArchive';
 import AppDAO from './dao';
-import ProductNameRepository from './repositories/product_name_repository';
 import PackingTypeRepository from './repositories/packing_type_repository';
-const dao = new AppDAO('better_sqlite_demo');
+import ProductNameRepository from './repositories/product_name_repository';
+const dao = new AppDAO('sqlite_0.1.0');
 
 const productNameRepo = new ProductNameRepository(dao);
 const packingTypeRepo = new PackingTypeRepository(dao);
@@ -266,6 +267,20 @@ ipcMain.on('get:packing_types', async (event, mainData) => {
     console.log({ result });
     win.webContents.send('get:packing_types', result);
   });
+});
+
+ipcMain.on('add:zip', async (event, mainData) => {
+  console.log('Inside Main add:zip');
+  console.log({ mainData });
+  createZipArchive('./test');
+  // const webContents = event.sender;
+  // const win = BrowserWindow.fromWebContents(webContents);
+
+  // productNameRepo.getAll().then((result: any) => {
+  //   console.log('result from add:zip sql');
+  //   console.log({ result });
+  //   win.webContents.send('add:zip', result);
+  // });
 });
 
 app.on('window-all-closed', () => {

@@ -8,6 +8,7 @@ import React, { FC, useEffect, useState } from 'react';
 import { Link, MemoryRouter as Router, Route, Routes } from 'react-router-dom';
 import './App.css';
 import Grid from './grid/GridSample';
+import { Backup } from './pages/Backup';
 import { PackingType } from './setup/PackingType';
 import { ProductName } from './setup/ProductName';
 const { Content, Footer, Sider } = Layout;
@@ -53,7 +54,7 @@ export default function App() {
             mode="inline"
             items={items}
           /> */}
-          <Menu theme="dark" defaultSelectedKeys={['1']} mode="inline">
+          <Menu theme="light" defaultSelectedKeys={['1']} mode="inline">
             <Menu.Item key="grid">
               <FormOutlined />
               <span>Grid</span>
@@ -68,6 +69,11 @@ export default function App() {
               <OrderedListOutlined />
               <span>Product Name</span>
               <Link to="/product_name" />
+            </Menu.Item>
+            <Menu.Item key="backup">
+              <OrderedListOutlined />
+              <span>Backup</span>
+              <Link to="/backup" />
             </Menu.Item>
             {/* <Menu.SubMenu
               title={
@@ -100,6 +106,7 @@ export default function App() {
                 <Route path="/" element={<Grid />} />
                 <Route path="/packing_type" element={<PackingType />} />
                 <Route path="/product_name" element={<ProductName />} />
+                <Route path="/backup" element={<Backup />} />
               </Routes>
             </div>
           </Content>

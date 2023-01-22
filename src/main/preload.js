@@ -3,74 +3,80 @@ const { contextBridge, ipcRenderer } = require('electron');
 const WINDOW_API = {
   ipcRenderer: {
     createBill(preloadData) {
-      console.log("Inside preload create:bill")
-      console.log({preloadData})
+      console.log('Inside preload create:bill');
+      console.log({ preloadData });
       ipcRenderer.send('create:bill', preloadData);
     },
     updateBill(preloadData) {
-      console.log("Inside preload update:bill")
-      console.log({preloadData})
+      console.log('Inside preload update:bill');
+      console.log({ preloadData });
 
       ipcRenderer.send('update:bill', preloadData);
     },
 
     deleteBill(preloadData) {
-      console.log("Inside preload delete:bill")
-      console.log({preloadData})
+      console.log('Inside preload delete:bill');
+      console.log({ preloadData });
 
       ipcRenderer.send('delete:bill', preloadData);
     },
     getAllBills(preloadData) {
-      console.log("Inside preload get:bills")
-      console.log({preloadData})
+      console.log('Inside preload get:bills');
+      console.log({ preloadData });
 
       ipcRenderer.send('get:bills', preloadData);
     },
     createPackingType(preloadData) {
-      console.log("Inside preload create:packing_type")
-      console.log({preloadData})
+      console.log('Inside preload create:packing_type');
+      console.log({ preloadData });
       ipcRenderer.send('create:packing_type', preloadData);
     },
     updatePackingType(preloadData) {
-      console.log("Inside preload update:packing_type")
-      console.log({preloadData})
+      console.log('Inside preload update:packing_type');
+      console.log({ preloadData });
 
       ipcRenderer.send('update:packing_type', preloadData);
     },
     deletePackingType(preloadData) {
-      console.log("Inside preload delete:packing_type")
-      console.log({preloadData})
+      console.log('Inside preload delete:packing_type');
+      console.log({ preloadData });
 
       ipcRenderer.send('delete:packing_type', preloadData);
     },
     getAllPackingTypes(preloadData) {
-      console.log("Inside preload get:packing_types")
-      console.log({preloadData})
+      console.log('Inside preload get:packing_types');
+      console.log({ preloadData });
 
       ipcRenderer.send('get:packing_types', preloadData);
     },
     createProductName(preloadData) {
-      console.log("Inside preload create:product_name")
-      console.log({preloadData})
+      console.log('Inside preload create:product_name');
+      console.log({ preloadData });
       ipcRenderer.send('create:product_name', preloadData);
     },
     updateProductName(preloadData) {
-      console.log("Inside preload update:product_name")
-      console.log({preloadData})
+      console.log('Inside preload update:product_name');
+      console.log({ preloadData });
 
       ipcRenderer.send('update:product_name', preloadData);
     },
     deleteProductName(preloadData) {
-      console.log("Inside preload delete:product_name")
-      console.log({preloadData})
+      console.log('Inside preload delete:product_name');
+      console.log({ preloadData });
 
       ipcRenderer.send('delete:product_name', preloadData);
     },
     getAllProductNames(preloadData) {
-      console.log("Inside preload get:product_names")
-      console.log({preloadData})
+      console.log('Inside preload get:product_names');
+      console.log({ preloadData });
 
       ipcRenderer.send('get:product_names', preloadData);
+    },
+    addToZip(preloadData) {
+      console.log('Inside preload add:zip');
+      console.log({ preloadData });
+
+      ipcRenderer.send('add:zip', preloadData);
     },
     on(channel, func) {
       const validChannels = [
@@ -85,13 +91,14 @@ const WINDOW_API = {
         'create:product_name',
         'update:product_name',
         'delete:product_name',
-        'get:product_names'
+        'get:product_names',
+        'add:zip',
       ];
       if (validChannels.includes(channel)) {
         ipcRenderer.on(channel, (event, ...args) => func(...args));
       }
     },
   },
-}
+};
 
-contextBridge.exposeInMainWorld('electron',WINDOW_API );
+contextBridge.exposeInMainWorld('electron', WINDOW_API);
