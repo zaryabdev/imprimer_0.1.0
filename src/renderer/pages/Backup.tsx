@@ -3,6 +3,7 @@ import type { ColumnsType } from 'antd/es/table';
 import React, { useEffect, useState } from 'react';
 
 const Backup: React.FC = () => {
+  const [res, setRes] = useState({});
   function addToZip() {
     const status = {
       status: 'STARTED',
@@ -13,6 +14,7 @@ const Backup: React.FC = () => {
     window.electron.ipcRenderer.on('add:zip', (responseData: any) => {
       console.log('add:zip event response');
       console.log({ responseData });
+      setRes(responseData);
     });
   }
 
@@ -26,6 +28,7 @@ const Backup: React.FC = () => {
           Upload Zip
         </Button>
       </Space>
+      {JSON.stringify(res)}
     </div>
   );
 };

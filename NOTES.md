@@ -15,3 +15,6 @@ I'd say that's awesome but that's already what I'm telling people to do. At this
 npm i -g --prodution --vs2015 --add-python-to-path windows-build-tools node-gyp
 
 Quite a mouthful.
+
+Extract a .asar file
+npx asar extract app.asar destfolder

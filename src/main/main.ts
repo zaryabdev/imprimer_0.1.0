@@ -274,11 +274,18 @@ ipcMain.on('add:zip', async (event, mainData) => {
   console.log('Inside Main add:zip');
   console.log({ mainData });
 
-  createZipArchive('./test');
+  // createZipArchive('./test');
 
-  // createZipArchive('./backup/test');
-  // const webContents = event.sender;
-  // const win = BrowserWindow.fromWebContents(webContents);
+  // D:\\Work\\github-workspace\\imprimer_0.1.0\\release\\build\\win-unpacked\\resources\\app.asar\\dist\\main\\main.js
+
+  let ret = createZipArchive('../../../sqlite_0.1.0');
+  const webContents = event.sender;
+  const win = BrowserWindow.fromWebContents(webContents);
+  win.webContents.send('add:zip', {
+    dir: __dirname,
+    file: __filename,
+    data: ret,
+  });
 
   // productNameRepo.getAll().then((result: any) => {
   //   console.log('result from add:zip sql');
@@ -287,21 +294,23 @@ ipcMain.on('add:zip', async (event, mainData) => {
   // });
 });
 
-async function createZipArchive(filepath) {
+async function createZipArchive(filepath: string) {
   console.log(`Inside createZipArchive : ` + filepath);
 
   console.log(__dirname);
   console.log(__filename);
 
-  // try {
-  //   const zip = new AdmZip();
-  //   const outputFile = 'test.zip';
-  //   zip.addLocalFolder(filepath);
-  //   zip.writeZip(outputFile);
-  //   console.log(`Created ${outputFile} successfully`);
-  // } catch (e) {
-  //   console.log(`Something went wrong. ${e}`);
-  // }
+  try {
+    const zip = new AdmZip();
+    const outputFile = 'test.zip';
+    zip.addLocalFolder(filepath);
+    zip.writeZip(outputFile);
+    console.log(`Created ${outputFile} successfully`);
+    return { status: `Created ${outputFile} successfully` };
+  } catch (e) {
+    console.log(`Something went wrong. ${e}`);
+    return { e };
+  }
 }
 
 app.on('window-all-closed', () => {
