@@ -9,6 +9,7 @@ import { Link, MemoryRouter as Router, Route, Routes } from 'react-router-dom';
 import './App.css';
 import Grid from './grid/GridSample';
 import { Backup } from './pages/Backup';
+import { Registration } from './pages/Registration';
 import { PackingType } from './setup/PackingType';
 import { ProductName } from './setup/ProductName';
 const { Content, Footer, Sider } = Layout;
@@ -75,6 +76,11 @@ export default function App() {
               <span>Backup</span>
               <Link to="/backup" />
             </Menu.Item>
+            <Menu.Item key="registraion">
+              <OrderedListOutlined />
+              <span>Registration</span>
+              <Link to="/registraion" />
+            </Menu.Item>
             {/* <Menu.SubMenu
               title={
                 <React.Fragment>
@@ -107,6 +113,7 @@ export default function App() {
                 <Route path="/packing_type" element={<PackingType />} />
                 <Route path="/product_name" element={<ProductName />} />
                 <Route path="/backup" element={<Backup />} />
+                <Route path="/registraion" element={<Registration />} />
               </Routes>
             </div>
           </Content>
