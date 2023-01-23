@@ -282,9 +282,30 @@ ipcMain.on('add:zip', async (event, mainData) => {
   // failed
   // let ret = createZipArchive('../../../sqlite_010');
   // D:\Work\github-workspace\imprimer_0.1.0\release
-  let ret = createZipArchive(
-    'D:/Work/github-workspace/imprimer_0.1.0/release/build/win-unpacked/sqlite_010'
+
+  logger.debug('Paths');
+  logger.debug(webpackPaths.appPath);
+
+  let path0 = path.join(webpackPaths.appPath, 'sql');
+  let path1 = path.join(__dirname);
+
+  logger.debug(path0);
+  logger.debug(path1);
+
+  let ret = await createZipArchive(
+    'D:/office-work/github-workspace/imprimer_0.1.0/release/build/win-unpacked/db'
   );
+
+  // Read run-time assets
+  // const sql = isDevelopment
+  //   ? path.join(webpackPaths.appPath, 'sql')
+  //   : path.join(__dirname, '../../sql');
+  // In prod, __dirname is release/app/dist/main. We want release/app/sql
+  // const create = fs.readFileSync(path.join(sql, 'create.sql')).toString().trim();
+  // const insert = fs.readFileSync(path.join(sql, 'insert.sql')).toString().trim();
+
+  logger.debug('After zip func');
+  logger.debug(ret);
   const webContents = event.sender;
   const win = BrowserWindow.fromWebContents(webContents);
 
@@ -302,22 +323,21 @@ ipcMain.on('add:zip', async (event, mainData) => {
 });
 
 async function createZipArchive(filepath: string) {
-  logger.debug(`Inside createZipArchive : ` + filepath);
-
-  logger.debug(__dirname);
-  logger.debug(__filename);
+  logger.debug(`Inside createZipArchive path to dir to zip`);
+  logger.debug(filepath);
 
   try {
+    logger.debug('Going to zip');
     const zip = new AdmZip();
-    const outputFile = 'test.zip';
-    zip.addFile(filepath);
+    const outputFile = 'testing987.zip';
+    zip.addLocalFolder(filepath);
     zip.writeZip(outputFile);
     console.log(`Created ${outputFile} successfully`);
     logger.debug({ status: `Created ${outputFile} successfully` });
     return { status: `Created ${outputFile} successfully` };
   } catch (e) {
+    logger.debug(`Something went wrong.`);
     logger.debug(e);
-    logger.debug(`Something went wrong. ${e}`);
     return { e };
   }
 }
