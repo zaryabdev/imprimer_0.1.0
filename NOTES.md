@@ -18,3 +18,9 @@ Quite a mouthful.
 
 Extract a .asar file
 npx asar extract app.asar destfolder
+
+logger pattern
+https://stackoverflow.com/questions/9380785/node-js-winston-can-i-add-default-meta-data-to-all-log-messages
+
+adm-zip sample
+https://www.tabnine.com/code/javascript/functions/adm-zip/AdmZip/addLocalFolder

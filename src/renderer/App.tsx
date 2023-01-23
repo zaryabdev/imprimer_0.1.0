@@ -120,6 +120,7 @@ export default function App() {
           <Footer style={{ textAlign: 'center' }}>
             Imprimer ©2022 Created by Z Labz [ 0.1 ] | Connection status :
             <code>{JSON.stringify(isOnline, null, 2)}</code>
+            {JSON.stringify(process.env.NODE_ENV)}
           </Footer>
         </Layout>
       </Layout>

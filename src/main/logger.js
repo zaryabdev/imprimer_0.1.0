@@ -1,11 +1,12 @@
 const { format, createLogger, transports } = require('winston');
 
 const { combine, timestamp, label, printf } = format;
-const CATEGORY = 'imprimer logs';
-
+const CATEGORY = ' ';
+const DATE_TIME_FORMAT = 'MMM-DD-YYYY HH:mm:ss';
 //Using the printf format.
 const customFormat = printf(({ level, message, label, timestamp }) => {
-  return `${timestamp} [${label}] ${level}: ${message}`;
+  // return `${timestamp} [${label}] ${level}: ${message}`;
+  return `${message}`;
 });
 
 // transports: [new transports.Console()],
@@ -14,7 +15,7 @@ const logger = createLogger({
   format: combine(
     label({ label: CATEGORY }),
     timestamp({
-      format: 'MMM-DD-YYYY HH:mm:ss',
+      format: 'mm:ss',
     }),
     customFormat
   ),
