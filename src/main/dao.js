@@ -7,7 +7,7 @@ class AppDAO {
   constructor(dbFilePath) {
     logger.debug(__dirname);
     logger.debug(dbFilePath);
-    this.db = new Database(`./src/${dbFilePath}`, {
+    this.db = new Database(`./db/${dbFilePath}`, {
       verbose: console.log('Connected to Database'),
     });
   }

@@ -6,6 +6,7 @@ import {
 import { Layout, Menu } from 'antd';
 import React, { FC, useEffect, useState } from 'react';
 import { Link, MemoryRouter as Router, Route, Routes } from 'react-router-dom';
+import data from '../../db/data';
 import './App.css';
 import Grid from './grid/GridSample';
 import { Backup } from './pages/Backup';
@@ -113,6 +114,7 @@ export default function App() {
           <Footer style={{ textAlign: 'center' }}>
             Imprimer ©2022 Created by Z Labz [ 0.1 ] | Connection status :
             <code>{JSON.stringify(isOnline, null, 2)}</code>
+            <code>{JSON.stringify(data, null, 2)}</code>
           </Footer>
         </Layout>
       </Layout>
