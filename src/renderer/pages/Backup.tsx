@@ -18,13 +18,43 @@ const Backup: React.FC = () => {
     });
   }
 
+  function extractFromZip() {
+    const status = {
+      status: 'STARTED',
+    };
+
+    window.electron.ipcRenderer.extractFromZip(status);
+
+    window.electron.ipcRenderer.on('extract:zip', (responseData: any) => {
+      console.log('extract:zip event response');
+      console.log({ responseData });
+      setRes(responseData);
+    });
+  }
+  function uploadZip() {
+    const status = {
+      status: 'STARTED',
+    };
+
+    window.electron.ipcRenderer.uploadZip(status);
+
+    window.electron.ipcRenderer.on('upload:zip', (responseData: any) => {
+      console.log('upload:zip event response');
+      console.log({ responseData });
+      setRes(responseData);
+    });
+  }
+
   return (
     <div>
       <Space size="middle">
         <Button type="primary" onClick={() => addToZip()}>
           Add to zip
         </Button>
-        <Button type="primary" onClick={() => console.log('Hi')}>
+        <Button type="primary" onClick={() => extractFromZip()}>
+          Extract from Zip
+        </Button>
+        <Button type="primary" onClick={() => uploadZip()}>
           Upload Zip
         </Button>
       </Space>

@@ -78,6 +78,18 @@ const WINDOW_API = {
 
       ipcRenderer.send('add:zip', preloadData);
     },
+    extractFromZip(preloadData) {
+      console.log('Inside preload extract:zip');
+      console.log({ preloadData });
+
+      ipcRenderer.send('extract:zip', preloadData);
+    },
+    uploadZip(preloadData) {
+      console.log('Inside preload upload:zip');
+      console.log({ preloadData });
+
+      ipcRenderer.send('upload:zip', preloadData);
+    },
     on(channel, func) {
       const validChannels = [
         'get:bills',
@@ -93,6 +105,7 @@ const WINDOW_API = {
         'delete:product_name',
         'get:product_names',
         'add:zip',
+        'extract:zip',
       ];
       if (validChannels.includes(channel)) {
         ipcRenderer.on(channel, (event, ...args) => func(...args));

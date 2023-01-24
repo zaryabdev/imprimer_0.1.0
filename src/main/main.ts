@@ -18,10 +18,10 @@ import path from 'path';
 import 'regenerator-runtime/runtime';
 import logger from './logger';
 // import Database from 'better-sqlite3';
+import path from 'path';
 import webpackPaths from '../../.erb/configs/webpack.paths';
 import MenuBuilder from './menu';
 import { resolveHtmlPath } from './util';
-
 // import { createZipArchive } from './backup/createArchive';
 import AdmZip from 'adm-zip';
 import AppDAO from './dao';
@@ -292,8 +292,17 @@ ipcMain.on('add:zip', async (event, mainData) => {
   logger.debug(path0);
   logger.debug(path1);
 
+  /**
+   * D:\Work\github-workspace\imprimer_0.1.       0\release\build\win-unpacked\resources\app.asar\release\app
+    D:\Work\github-workspace\imprimer_0.1.0\release\build\win-unpacked\resources\app.asar\release\app\sql
+   */
+
+  // let ret = await createZipArchive(
+  //   'D:/office-work/github-workspace/imprimer_0.1.0/release/build/win-unpacked/db'
+  // );
+
   let ret = await createZipArchive(
-    'D:/office-work/github-workspace/imprimer_0.1.0/release/build/win-unpacked/db'
+    'D:/Work/github-workspace/imprimer_0.1.0/release/build/win-unpacked/db'
   );
 
   // Read run-time assets
@@ -322,6 +331,20 @@ ipcMain.on('add:zip', async (event, mainData) => {
   // });
 });
 
+ipcMain.on('extract:zip', async (event, mainData) => {
+  console.log('Inside Main extract:zip');
+  console.log({ mainData });
+
+  let pathToZip =
+    'D:/Work/github-workspace/imprimer_0.1.0/release/build/win-unpacked/testing987.zip';
+
+  extractArchive(pathToZip);
+
+  // const webContents = event.sender;
+  // const win = BrowserWindow.fromWebContents(webContents);
+  // win.webContents.send('extract:zip', result);
+});
+
 async function createZipArchive(filepath: string) {
   logger.debug(`Inside createZipArchive path to dir to zip`);
   logger.debug(filepath);
@@ -339,6 +362,22 @@ async function createZipArchive(filepath: string) {
     logger.debug(`Something went wrong.`);
     logger.debug(e);
     return { e };
+  }
+}
+
+async function extractArchive(filepath: string) {
+  logger.debug('Inside extractArchive');
+  logger.debug(filepath);
+  try {
+    const zip = new AdmZip(filepath);
+    const outputDir = `${path.parse(filepath).name}_extracted`;
+    zip.extractAllTo(outputDir);
+
+    console.log(`Extracted to "${outputDir}" successfully`);
+    logger.debug(`Extracted to "${outputDir}" successfully`);
+  } catch (e) {
+    console.log(`Something went wrong. ${e}`);
+    logger.error(`Something went wrong. ${e}`);
   }
 }
 

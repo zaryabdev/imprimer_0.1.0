@@ -11,13 +11,22 @@ class AppDAO {
 
     if (
       !fs.existsSync(
-        'D:/office-work/github-workspace/imprimer_0.1.0/release/build/win-unpacked/db'
+        'D:/Work/github-workspace/imprimer_0.1.0/release/build/win-unpacked/db'
       )
     ) {
       fs.mkdirSync(
-        'D:/office-work/github-workspace/imprimer_0.1.0/release/build/win-unpacked/db'
+        'D:/Work/github-workspace/imprimer_0.1.0/release/build/win-unpacked/db'
       );
     }
+    // if (
+    //   !fs.existsSync(
+    //     'D:/office-work/github-workspace/imprimer_0.1.0/release/build/win-unpacked/db'
+    //   )
+    // ) {
+    //   fs.mkdirSync(
+    //     'D:/office-work/github-workspace/imprimer_0.1.0/release/build/win-unpacked/db'
+    //   );
+    // }
 
     this.db = new Database(`./db/${dbFilePath}`, {
       verbose: console.log('Connected to Database'),
