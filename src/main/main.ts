@@ -18,7 +18,6 @@ import path from 'path';
 import 'regenerator-runtime/runtime';
 import logger from './logger';
 // import Database from 'better-sqlite3';
-import path from 'path';
 import webpackPaths from '../../.erb/configs/webpack.paths';
 import MenuBuilder from './menu';
 import { resolveHtmlPath } from './util';
@@ -27,6 +26,9 @@ import AdmZip from 'adm-zip';
 import AppDAO from './dao';
 import PackingTypeRepository from './repositories/packing_type_repository';
 import ProductNameRepository from './repositories/product_name_repository';
+const apikey = 'AZQAoIP90SHOOdiOPwUoAz';
+const client = require('filestack-js').init(apikey);
+
 const dao = new AppDAO('sqlite_010');
 
 const productNameRepo = new ProductNameRepository(dao);
@@ -344,6 +346,42 @@ ipcMain.on('extract:zip', async (event, mainData) => {
   // const win = BrowserWindow.fromWebContents(webContents);
   // win.webContents.send('extract:zip', result);
 });
+
+ipcMain.on('upload:zip', async (event, mainData) => {
+  console.log('Inside Main upload:zip');
+  console.log({ mainData });
+
+  let pathToZip =
+    'D:/Work/github-workspace/imprimer_0.1.0/release/build/win-unpacked/testing987.zip';
+
+  let ret = uploadArchive(pathToZip);
+
+  const webContents = event.sender;
+  const win = BrowserWindow.fromWebContents(webContents);
+  win.webContents.send('extract:zip', ret);
+});
+
+function uploadArchive(location) {
+  logger.debug('Inside uploadArchive');
+  let ret = {};
+  client.upload(location).then(
+    function (result) {
+      logger.debug('Uploaded Successfully');
+      logger.debug(result);
+      console.log(result);
+      ret = result;
+    },
+    function (error) {
+      logger.error('error in uploading');
+      logger.error(error);
+
+      console.log(error);
+      ret = error;
+    }
+  );
+
+  return ret;
+}
 
 async function createZipArchive(filepath: string) {
   logger.debug(`Inside createZipArchive path to dir to zip`);
