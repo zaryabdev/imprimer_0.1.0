@@ -1,3 +1,8 @@
+Add delete db
+Add download zip
+Extract db
+Fix package name crud
+
 Registration:
 
 1. username
