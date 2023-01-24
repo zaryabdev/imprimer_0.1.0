@@ -14,3 +14,4 @@ async function extractArchive(filepath) {
 }
 
 // extractArchive("./test.zip");
+extractArchive('D:/office-work/github-workspace/imprimer_0.1.0/testing987.zip');

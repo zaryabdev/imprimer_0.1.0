@@ -56,11 +56,11 @@ export default function App() {
             items={items}
           /> */}
           <Menu theme="light" defaultSelectedKeys={['1']} mode="inline">
-            <Menu.Item key="grid">
+            {/* <Menu.Item key="grid">
               <FormOutlined />
               <span>Grid</span>
               <Link to="/" />
-            </Menu.Item>
+            </Menu.Item> */}
             <Menu.Item key="packing_type">
               <SettingOutlined />
               <span>Packing Type</span>
@@ -109,7 +109,7 @@ export default function App() {
               style={{ padding: 24, minHeight: 360 }}
             >
               <Routes>
-                <Route path="/" element={<Grid />} />
+                {/* <Route path="/" element={<Grid />} /> */}
                 <Route path="/packing_type" element={<PackingType />} />
                 <Route path="/product_name" element={<ProductName />} />
                 <Route path="/backup" element={<Backup />} />

@@ -5,30 +5,48 @@ const fs = require('fs');
 const logger = require('./logger');
 
 class AppDAO {
-  constructor(dbFilePath) {
-    logger.debug(__dirname);
-    logger.debug(dbFilePath);
+  constructor(dbName) {
+    logger.debug('DB NAME');
+    logger.debug(dbName);
 
-    if (
-      !fs.existsSync(
-        'D:/Work/github-workspace/imprimer_0.1.0/release/build/win-unpacked/db'
-      )
-    ) {
-      fs.mkdirSync(
-        'D:/Work/github-workspace/imprimer_0.1.0/release/build/win-unpacked/db'
-      );
-    }
+    let pathToDb = '';
+
+    // home laptop
     // if (
     //   !fs.existsSync(
-    //     'D:/office-work/github-workspace/imprimer_0.1.0/release/build/win-unpacked/db'
+    //     'D:/Work/github-workspace/imprimer_0.1.0/release/build/win-unpacked/db'
     //   )
     // ) {
     //   fs.mkdirSync(
-    //     'D:/office-work/github-workspace/imprimer_0.1.0/release/build/win-unpacked/db'
+    //     'D:/Work/github-workspace/imprimer_0.1.0/release/build/win-unpacked/db'
     //   );
     // }
 
-    this.db = new Database(`./db/${dbFilePath}`, {
+    // this.db = new Database(`./db/${dbName}`, {
+    //   verbose: console.log('Connected to Database'),
+    // });
+
+    if (process.env.NODE_ENV === 'development') {
+      pathToDb = `D:/office-work/github-workspace/imprimer_0.1.0/db`;
+
+      if (!fs.existsSync(pathToDb)) {
+        fs.mkdirSync(pathToDb);
+      }
+
+      pathToDb = `D:/office-work/github-workspace/imprimer_0.1.0/db/${dbName}`;
+    }
+    // else if (process.env.NODE_ENV === 'production') {
+    //   // working in package mode
+    //   pathToDb = `D:/Work/github-workspace/imprimer_0.1.0/release/build/win-unpacked/db`;
+
+    //   if (!fs.existsSync(pathToDb)) {
+    //     fs.mkdirSync(pathToDb);
+    //   }
+
+    //   pathToDb = `D:/Work/github-workspace/imprimer_0.1.0/release/build/win-unpacked/db/${dbName}`;
+    // }
+
+    this.db = new Database(`${pathToDb}`, {
       verbose: console.log('Connected to Database'),
     });
   }

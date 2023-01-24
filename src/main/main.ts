@@ -285,27 +285,36 @@ ipcMain.on('add:zip', async (event, mainData) => {
   // let ret = createZipArchive('../../../sqlite_010');
   // D:\Work\github-workspace\imprimer_0.1.0\release
 
-  logger.debug('Paths');
-  logger.debug(webpackPaths.appPath);
+  // logger.debug('Paths');
+  // logger.debug(webpackPaths.appPath);
 
-  let path0 = path.join(webpackPaths.appPath, 'sql');
-  let path1 = path.join(__dirname);
+  // let path0 = path.join(webpackPaths.appPath, 'sql');
+  // let path1 = path.join(__dirname);
 
-  logger.debug(path0);
-  logger.debug(path1);
+  // logger.debug(path0);
+  // logger.debug(path1);
 
   /**
    * D:\Work\github-workspace\imprimer_0.1.       0\release\build\win-unpacked\resources\app.asar\release\app
     D:\Work\github-workspace\imprimer_0.1.0\release\build\win-unpacked\resources\app.asar\release\app\sql
    */
 
-  // let ret = await createZipArchive(
-  //   'D:/office-work/github-workspace/imprimer_0.1.0/release/build/win-unpacked/db'
-  // );
+  let pathToDb = '';
 
-  let ret = await createZipArchive(
-    'D:/Work/github-workspace/imprimer_0.1.0/release/build/win-unpacked/db'
-  );
+  if (process.env.NODE_ENV === 'development') {
+    pathToDb = `D:/office-work/github-workspace/imprimer_0.1.0/db/`;
+    // no need to change right now
+  }
+  // else if (process.env.NODE_ENV === 'production ') {
+  //   pathToDb =
+  //     'D:/office-work/github-workspace/imprimer_0.1.0/release/build/win-unpacked/db';
+  // }
+
+  let ret = await createZipArchive(pathToDb);
+
+  // let ret = await createZipArchive(
+  //   'D:/Work/github-workspace/imprimer_0.1.0/release/build/win-unpacked/db'
+  // );
 
   // Read run-time assets
   // const sql = isDevelopment
@@ -334,11 +343,18 @@ ipcMain.on('add:zip', async (event, mainData) => {
 });
 
 ipcMain.on('extract:zip', async (event, mainData) => {
-  console.log('Inside Main extract:zip');
-  console.log({ mainData });
+  logger.debug('Inside Main extract:zip');
+  logger.debug({ mainData });
 
-  let pathToZip =
-    'D:/Work/github-workspace/imprimer_0.1.0/release/build/win-unpacked/testing987.zip';
+  let pathToZip = '';
+
+  if (process.env.NODE_ENV === 'development') {
+    // D:/office-work/github-workspace/imprimer_0.1.0/testing987.zip
+    pathToZip = `D:/office-work/github-workspace/imprimer_0.1.0/testing987.zip`;
+  } else if (process.env.NODE_ENV === 'production') {
+    pathToZip =
+      'D:/office-work/github-workspace/imprimer_0.1.0/release/build/win-unpacked/testing987.zip';
+  }
 
   extractArchive(pathToZip);
 
@@ -352,7 +368,7 @@ ipcMain.on('upload:zip', async (event, mainData) => {
   console.log({ mainData });
 
   let pathToZip =
-    'D:/Work/github-workspace/imprimer_0.1.0/release/build/win-unpacked/testing987.zip';
+    'D:/office-work/github-workspace/imprimer_0.1.0/release/build/win-unpacked/testing987.zip';
 
   let ret = uploadArchive(pathToZip);
 
