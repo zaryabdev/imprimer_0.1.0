@@ -37,6 +37,9 @@ const packingTypeRepo = new PackingTypeRepository(dao);
 productNameRepo.createTable();
 packingTypeRepo.createTable();
 
+console.log('Inside main.ts');
+console.log({ webpackPaths });
+
 export default class AppUpdater {
   constructor() {
     log.transports.file.level = 'info';

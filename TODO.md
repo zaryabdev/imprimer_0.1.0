@@ -1,16 +1,30 @@
-Development:
+# TODO
+
+## Notes to remeber for future:
+
+1. Move db & temp dir creation from DAO to main.
+2. Utilise webpackPaths instead of hand written.
+3. Check if this function `checkFileExistsSync() -> fs.accessSync` uses LTS modules and is not deprecated
+4. Check if this function `createZipArchive() -> fs.truncateSync` uses LTS modules and is not deprecated
+5. Restoring DB issue, figure out how to replace DB because once DB is removed new one is created and is linked to app. Which we cannot delete or replace. Either create a new electron app for this procedure or figure out another way to do so.
+6. Save download url.
+7. Send backup status and url to server database.
+
+## Development:
+
 Add delete db
 Add download zip
 Extract db
 Fix package name crud
 
-Production:
+## Production:
+
 Add delete db
 Add download zip
 Extract db
 Fix package name crud
 
-Registration:
+### Registration:
 
 1. username
 2. password
@@ -26,7 +40,7 @@ Registration:
    b. Phone
 7. register
 
-Login:
+### Login:
 
 1. username
 2. password
