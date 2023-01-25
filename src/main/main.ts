@@ -377,7 +377,7 @@ ipcMain.on('upload:zip', async (event, mainData) => {
   win.webContents.send('extract:zip', ret);
 });
 
-function uploadArchive(location) {
+function uploadArchive(location: string) {
   logger.debug('Inside uploadArchive');
   let ret = {};
   client.upload(location).then(

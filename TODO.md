@@ -1,3 +1,10 @@
+Development:
+Add delete db
+Add download zip
+Extract db
+Fix package name crud
+
+Production:
 Add delete db
 Add download zip
 Extract db
