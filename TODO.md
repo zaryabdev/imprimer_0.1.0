@@ -9,6 +9,7 @@
 5. Restoring DB issue, figure out how to replace DB because once DB is removed new one is created and is linked to app. Which we cannot delete or replace. Either create a new electron app for this procedure or figure out another way to do so.
 6. Save download url.
 7. Send backup status and url to server database.
+8. Figure out should we delete file `db_details.json` and create a new one for each upload or empty it.
 
 ## Development:
 
@@ -50,7 +51,7 @@ Fix package name crud
 4. keep logged-in
 5. login
 
-Process:
+### Process:
 
 1. save data -> registration
 2. check if username exixts & password matches
