@@ -14,18 +14,18 @@ import { app, BrowserWindow, ipcMain, shell } from 'electron';
 import log from 'electron-log';
 import { autoUpdater } from 'electron-updater';
 import fs from 'fs';
+import jsonfile from 'jsonfile';
 import path from 'path';
 import 'regenerator-runtime/runtime';
 import logger from './logger';
 // import Database from 'better-sqlite3';
-import webpackPaths from '../../.erb/configs/webpack.paths';
-import MenuBuilder from './menu';
-import { resolveHtmlPath } from './util';
-// import { createZipArchive } from './backup/createArchive';
 import AdmZip from 'adm-zip';
+import webpackPaths from '../../.erb/configs/webpack.paths';
 import AppDAO from './dao';
+import MenuBuilder from './menu';
 import PackingTypeRepository from './repositories/packing_type_repository';
 import ProductNameRepository from './repositories/product_name_repository';
+import { resolveHtmlPath } from './util';
 const apikey = 'AZQAoIP90SHOOdiOPwUoAz';
 const client = require('filestack-js').init(apikey);
 
@@ -300,9 +300,11 @@ ipcMain.on('add:zip', async (event, mainData) => {
    */
 
   let pathToDb = '';
+  let pathToTempFolder = '';
 
   if (process.env.NODE_ENV === 'development') {
     pathToDb = `D:/office-work/github-workspace/imprimer_0.1.0/db/`;
+    pathToTempFolder = `D:/office-work/github-workspace/imprimer_0.1.0/temp/`;
     // no need to change right now
   }
   // else if (process.env.NODE_ENV === 'production ') {
@@ -310,7 +312,7 @@ ipcMain.on('add:zip', async (event, mainData) => {
   //     'D:/office-work/github-workspace/imprimer_0.1.0/release/build/win-unpacked/db';
   // }
 
-  let ret = await createZipArchive(pathToDb);
+  let ret = await createZipArchive(pathToDb, pathToTempFolder);
 
   // let ret = await createZipArchive(
   //   'D:/Work/github-workspace/imprimer_0.1.0/release/build/win-unpacked/db'
@@ -399,15 +401,36 @@ function uploadArchive(location: string) {
   return ret;
 }
 
-async function createZipArchive(filepath: string) {
+async function createZipArchive(pathToDb: string, pathToTempFolder: string) {
   logger.debug(`Inside createZipArchive path to dir to zip`);
-  logger.debug(filepath);
+  logger.debug(pathToDb);
+
+  let jsonFilePath = `${pathToDb}db_details.json`;
+  let fileExists = checkFileExistsSync(jsonFilePath);
+  const obj = { dateCreated: '1234567890', signature: 'Zaryab' };
+  console.log('File exits' + fileExists);
+  if (fileExists) {
+    console.log('File exits' + fileExists);
+    jsonfile.writeFileSync(jsonFilePath, obj);
+  } else {
+    console.log('File exits' + fileExists);
+
+    try {
+      await fs.truncateSync(jsonFilePath, 0);
+      console.log('Inside fs.truncateSync');
+    } catch (err) {
+      console.log('Inside fs.truncateSync error');
+      await fs.writeFileSync(jsonFilePath, '', { flag: 'wx' });
+    }
+
+    jsonfile.writeFileSync(jsonFilePath, obj);
+  }
 
   try {
     logger.debug('Going to zip');
     const zip = new AdmZip();
-    const outputFile = 'testing987.zip';
-    zip.addLocalFolder(filepath);
+    const outputFile = `${pathToTempFolder}testing6667.zip`;
+    zip.addLocalFolder(pathToDb);
     zip.writeZip(outputFile);
     console.log(`Created ${outputFile} successfully`);
     logger.debug({ status: `Created ${outputFile} successfully` });
@@ -417,6 +440,16 @@ async function createZipArchive(filepath: string) {
     logger.debug(e);
     return { e };
   }
+}
+
+function checkFileExistsSync(filepath) {
+  let flag = true;
+  try {
+    fs.accessSync(filepath, fs.constants.F_OK);
+  } catch (e) {
+    flag = false;
+  }
+  return flag;
 }
 
 async function extractArchive(filepath: string) {

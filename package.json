@@ -222,6 +222,7 @@
     "filestack-js": "^3.25.0",
     "fuse.js": "^6.6.2",
     "history": "5.x.x",
+    "jsonfile": "^6.1.0",
     "nanoid": "^4.0.0",
     "react": "^17.0.2",
     "react-datasheet-grid": "^4.4.2",

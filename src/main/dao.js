@@ -10,6 +10,7 @@ class AppDAO {
     logger.debug(dbName);
 
     let pathToDb = '';
+    let pathToTempFolder = '';
 
     // home laptop
     // if (
@@ -28,9 +29,14 @@ class AppDAO {
 
     if (process.env.NODE_ENV === 'development') {
       pathToDb = `D:/office-work/github-workspace/imprimer_0.1.0/db`;
+      pathToTempFolder = `D:/office-work/github-workspace/imprimer_0.1.0/temp`;
 
       if (!fs.existsSync(pathToDb)) {
         fs.mkdirSync(pathToDb);
+      }
+
+      if (!fs.existsSync(pathToTempFolder)) {
+        fs.mkdirSync(pathToTempFolder);
       }
 
       pathToDb = `D:/office-work/github-workspace/imprimer_0.1.0/db/${dbName}`;
