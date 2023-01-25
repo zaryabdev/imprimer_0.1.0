@@ -349,16 +349,18 @@ ipcMain.on('extract:zip', async (event, mainData) => {
   logger.debug({ mainData });
 
   let pathToZip = '';
+  let pathToExtract = '';
 
   if (process.env.NODE_ENV === 'development') {
     // D:/office-work/github-workspace/imprimer_0.1.0/testing987.zip
-    pathToZip = `D:/office-work/github-workspace/imprimer_0.1.0/testing987.zip`;
+    pathToZip = `D:/office-work/github-workspace/imprimer_0.1.0/temp/db_zip.zip`;
+    pathToExtract = `D:/office-work/github-workspace/imprimer_0.1.0/db/`;
   } else if (process.env.NODE_ENV === 'production') {
     pathToZip =
       'D:/office-work/github-workspace/imprimer_0.1.0/release/build/win-unpacked/testing987.zip';
   }
 
-  extractArchive(pathToZip);
+  extractArchive(pathToZip, pathToExtract);
 
   // const webContents = event.sender;
   // const win = BrowserWindow.fromWebContents(webContents);
@@ -369,8 +371,21 @@ ipcMain.on('upload:zip', async (event, mainData) => {
   console.log('Inside Main upload:zip');
   console.log({ mainData });
 
-  let pathToZip =
-    'D:/office-work/github-workspace/imprimer_0.1.0/release/build/win-unpacked/testing987.zip';
+  let pathToDb = '';
+  let pathToTempFolder = '';
+  let pathToZip = '';
+
+  if (process.env.NODE_ENV === 'development') {
+    pathToDb = `D:/office-work/github-workspace/imprimer_0.1.0/db/`;
+    pathToTempFolder = `D:/office-work/github-workspace/imprimer_0.1.0/temp/`;
+    pathToZip =
+      'D:/office-work/github-workspace/imprimer_0.1.0/temp/db_zip.zip';
+    // no need to change right now
+  }
+  // else if (process.env.NODE_ENV === 'production ') {
+  //   pathToDb =
+  //     'D:/office-work/github-workspace/imprimer_0.1.0/release/build/win-unpacked/db';
+  // }
 
   let ret = uploadArchive(pathToZip);
 
@@ -429,7 +444,7 @@ async function createZipArchive(pathToDb: string, pathToTempFolder: string) {
   try {
     logger.debug('Going to zip');
     const zip = new AdmZip();
-    const outputFile = `${pathToTempFolder}testing6667.zip`;
+    const outputFile = `${pathToTempFolder}db_zip.zip`;
     zip.addLocalFolder(pathToDb);
     zip.writeZip(outputFile);
     console.log(`Created ${outputFile} successfully`);
@@ -452,12 +467,16 @@ function checkFileExistsSync(filepath) {
   return flag;
 }
 
-async function extractArchive(filepath: string) {
+async function extractArchive(filepath: string, pathToExtract: string) {
+  // pathToZip = `D:/office-work/github-workspace/imprimer_0.1.0/temp/db_zip.zip`;
+  // pathToExtract = `D:/office-work/github-workspace/imprimer_0.1.0/db/`;
+
   logger.debug('Inside extractArchive');
   logger.debug(filepath);
   try {
     const zip = new AdmZip(filepath);
-    const outputDir = `${path.parse(filepath).name}_extracted`;
+    // const outputDir = `${path.parse(filepath).name}_extracted`;
+    const outputDir = `${pathToExtract}/`;
     zip.extractAllTo(outputDir);
 
     console.log(`Extracted to "${outputDir}" successfully`);
